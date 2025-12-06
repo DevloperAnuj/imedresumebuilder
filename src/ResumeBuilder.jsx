@@ -206,344 +206,349 @@ const ResumeBuilder = () => {
 
 
     return (
-        <div className="min-h-screen bg-gray-200 font-sans flex flex-col items-center">
+        <div className="h-screen bg-white md:bg-gray-200 font-sans flex flex-col overflow-hidden print:h-auto print:overflow-visible">
             <InfoModal isOpen={showInfo} onClose={() => setShowInfo(false)} />
 
             {/* --- Toolbar --- */}
-            <div className="w-full bg-white shadow-md p-4 sticky top-0 z-50 print:hidden flex justify-between items-center">
+            <div className="w-full bg-white shadow-md p-4 z-10 relative print:hidden flex flex-col md:flex-row justify-between items-center gap-4">
                 <h1 className="text-xl font-bold text-gray-800">IMED Resume Builder</h1>
-                <div className="flex gap-4">
+                <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto items-center">
                     <button
                         onClick={() => setShowInfo(true)}
-                        className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors flex items-center justify-center"
+                        className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors flex items-center justify-center order-first sm:order-none"
                         title="About Project"
                     >
                         <Info size={24} />
                     </button>
-                    <div className="flex bg-gray-100 p-1 rounded-lg">
+                    <div className="flex bg-gray-100 p-1 rounded-lg w-full sm:w-auto justify-center">
                         <button
                             onClick={() => setIsEditing(true)}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${isEditing ? 'bg-white shadow text-blue-600' : 'text-gray-600 hover:text-gray-900'}`}
+                            className={`flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all flex-1 sm:flex-none ${isEditing ? 'bg-white shadow text-blue-600' : 'text-gray-600 hover:text-gray-900'}`}
                         >
                             <Edit2 size={16} /> Edit
                         </button>
                         <button
                             onClick={() => setIsEditing(false)}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${!isEditing ? 'bg-white shadow text-green-600' : 'text-gray-600 hover:text-gray-900'}`}
+                            className={`flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all flex-1 sm:flex-none ${!isEditing ? 'bg-white shadow text-green-600' : 'text-gray-600 hover:text-gray-900'}`}
                         >
                             <Eye size={16} /> Preview
                         </button>
                     </div>
                     <button
                         onClick={handlePrint}
-                        className="flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded shadow text-sm font-bold transition-colors"
+                        className="flex items-center justify-center gap-2 bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded shadow text-sm font-bold transition-colors w-full sm:w-auto"
                     >
                         <Printer size={16} /> Print / Save PDF
                     </button>
                 </div>
             </div>
 
-            {/* --- Main Resume Sheet --- */}
-            <div className="my-8 print:my-0 print:w-full">
-                <div
-                    className="bg-white shadow-2xl print:shadow-none w-[210mm] min-h-[297mm] px-[20mm] mx-auto relative"
-                >
-                    <table className="w-full">
-                        <thead>
-                            <tr><td className="h-[20mm]"></td></tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    {/* Static Header Image */}
-                                    <header className="mb-6 border-b-2 border-transparent pb-4">
-                                        <div className="w-full flex items-center justify-center">
-                                            <img src={resumeData.headerImage} alt="Header" className="w-full max-h-40 object-contain" />
+            {/* --- Scrollable Content Area --- */}
+            <div className="flex-1 overflow-y-auto w-full print:overflow-visible print:h-auto">
+                {/* --- Main Resume Sheet --- */}
+                <div className="my-0 md:my-8 print:my-0 print:w-full w-full flex justify-center px-0 md:px-0">
+                    <div
+                        className="bg-white shadow-none md:shadow-2xl print:shadow-none w-full max-w-[210mm] min-h-screen md:min-h-[297mm] px-4 md:px-8 lg:px-[20mm] print:w-[210mm] print:px-[20mm] relative"
+                    >
+                        <table className="w-full">
+                            <thead>
+                                <tr><td className="h-[20mm]"></td></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        {/* Static Header Image */}
+                                        <header className="mb-6 border-b-2 border-transparent pb-4">
+                                            <div className="w-full flex items-center justify-center">
+                                                <img src={resumeData.headerImage} alt="Header" className="w-full max-h-40 object-contain" />
+                                            </div>
+                                        </header>
+
+                                        {/* Name */}
+                                        <div className="mb-6">
+                                            <div className="flex items-center gap-2 text-lg">
+                                                <span className="font-bold whitespace-nowrap">Name:</span>
+                                                <Input
+                                                    isEditing={isEditing}
+                                                    value={resumeData.name}
+                                                    onChange={(v) => handleInputChange('root', 'name', v)}
+                                                    className="font-bold"
+                                                />
+                                            </div>
                                         </div>
-                                    </header>
 
-                                    {/* Name */}
-                                    <div className="mb-6">
-                                        <div className="flex items-center gap-2 text-lg">
-                                            <span className="font-bold whitespace-nowrap">Name:</span>
-                                            <Input
-                                                isEditing={isEditing}
-                                                value={resumeData.name}
-                                                onChange={(v) => handleInputChange('root', 'name', v)}
-                                                className="font-bold"
-                                            />
+                                        {/* Personal Details Grid */}
+                                        <div className="grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 gap-x-8 gap-y-2 text-sm mb-6 font-sans">
+                                            <div className="flex flex-wrap gap-1"><span className="font-bold">Course:</span> <Input isEditing={isEditing} value={resumeData.details.course} onChange={(v) => handleInputChange('details', 'course', v)} /></div>
+                                            <div className="flex flex-wrap gap-1"><span className="font-bold">Specialization:</span> <Input isEditing={isEditing} value={resumeData.details.specialization} onChange={(v) => handleInputChange('details', 'specialization', v)} /></div>
+
+                                            <div className="flex flex-wrap gap-1"><span className="font-bold">Date of Birth:</span> <Input isEditing={isEditing} value={resumeData.details.dob} onChange={(v) => handleInputChange('details', 'dob', v)} /></div>
+                                            <div className="flex flex-wrap gap-1"><span className="font-bold">Area of Domicile:</span> <Input isEditing={isEditing} value={resumeData.details.domicile} onChange={(v) => handleInputChange('details', 'domicile', v)} /></div>
+
+                                            <div className="flex flex-wrap gap-1"><span className="font-bold">Email:</span> <Input isEditing={isEditing} value={resumeData.details.email} onChange={(v) => handleInputChange('details', 'email', v)} /></div>
+                                            <div className="flex flex-wrap gap-1"><span className="font-bold">Mobile:</span> <Input isEditing={isEditing} value={resumeData.details.mobile} onChange={(v) => handleInputChange('details', 'mobile', v)} /></div>
+
+                                            <div className="col-span-1 md:col-span-2 print:col-span-2 mt-1 flex flex-wrap gap-1">
+                                                <span className="font-bold whitespace-nowrap">Permanent Address:</span> <Input isEditing={isEditing} value={resumeData.details.address} onChange={(v) => handleInputChange('details', 'address', v)} multiline />
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    {/* Personal Details Grid */}
-                                    <div className="grid grid-cols-2 gap-x-8 gap-y-1 text-sm mb-6 font-sans">
-                                        <div className="flex gap-1"><span className="font-bold">Course:</span> <Input isEditing={isEditing} value={resumeData.details.course} onChange={(v) => handleInputChange('details', 'course', v)} /></div>
-                                        <div className="flex gap-1"><span className="font-bold">Specialization:</span> <Input isEditing={isEditing} value={resumeData.details.specialization} onChange={(v) => handleInputChange('details', 'specialization', v)} /></div>
+                                        {/* Career Objective */}
+                                        {(isEditing || resumeData.objective) && (<div className="mb-6 group relative">
+                                            <SectionTitle title="CAREER OBJECTIVE" />
+                                            <div className="text-sm text-justify leading-relaxed font-sans">
+                                                <Input isEditing={isEditing} value={resumeData.objective} onChange={(v) => handleInputChange('root', 'objective', v)} multiline />
+                                            </div>
+                                        </div>)}
 
-                                        <div className="flex gap-1"><span className="font-bold">Date of Birth:</span> <Input isEditing={isEditing} value={resumeData.details.dob} onChange={(v) => handleInputChange('details', 'dob', v)} /></div>
-                                        <div className="flex gap-1"><span className="font-bold">Area of Domicile:</span> <Input isEditing={isEditing} value={resumeData.details.domicile} onChange={(v) => handleInputChange('details', 'domicile', v)} /></div>
+                                        {/* Educational Qualification */}
+                                        {(isEditing || resumeData.education.length > 0) && (<div className="mb-6">
+                                            <SectionTitle title="EDUCATIONAL QUALIFICATION" />
+                                            <SectionActions isEditing={isEditing} onAdd={() => addItem('education', { exam: "New", year: "", board: "", marks: "" })} />
 
-                                        <div className="flex gap-1"><span className="font-bold">Email:</span> <Input isEditing={isEditing} value={resumeData.details.email} onChange={(v) => handleInputChange('details', 'email', v)} /></div>
-                                        <div className="flex gap-1"><span className="font-bold">Mobile:</span> <Input isEditing={isEditing} value={resumeData.details.mobile} onChange={(v) => handleInputChange('details', 'mobile', v)} /></div>
+                                            <div className="overflow-x-auto print:overflow-visible">
+                                                <table className="w-full border-collapse text-sm font-sans min-w-[600px] print:min-w-0 md:min-w-full">
+                                                    <thead>
+                                                        <tr className="bg-gray-50">
+                                                            <th className="border border-black p-2 w-1/6 font-bold">Examination Passed</th>
+                                                            <th className="border border-black p-2 w-1/6 font-bold">Year of Passing</th>
+                                                            <th className="border border-black p-2 w-1/2 font-bold">Board/ University</th>
+                                                            <th className="border border-black p-2 w-1/6 font-bold">% of Marks/SGPA</th>
+                                                            {isEditing && <th className="w-8 print:hidden"></th>}
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {resumeData.education.map((edu, idx) => (
+                                                            <tr key={idx} className="relative group">
+                                                                <td className="border border-black p-2 text-center align-top">
+                                                                    <Input isEditing={isEditing} value={edu.exam} onChange={(v) => handleArrayChange('education', idx, 'exam', v)} />
+                                                                </td>
+                                                                <td className="border border-black p-2 text-center align-top">
+                                                                    <Input isEditing={isEditing} value={edu.year} onChange={(v) => handleArrayChange('education', idx, 'year', v)} />
+                                                                </td>
+                                                                <td className="border border-black p-2 text-center align-top">
+                                                                    <Input isEditing={isEditing} value={edu.board} onChange={(v) => handleArrayChange('education', idx, 'board', v)} multiline />
+                                                                </td>
+                                                                <td className="border border-black p-2 text-center align-top">
+                                                                    <Input isEditing={isEditing} value={edu.marks} onChange={(v) => handleArrayChange('education', idx, 'marks', v)} />
+                                                                </td>
+                                                                {isEditing && (
+                                                                    <td className="border-0 p-1 text-center align-middle print:hidden">
+                                                                        <button onClick={() => removeItem('education', idx)} className="text-red-400 hover:text-red-600"><Trash2 size={16} /></button>
+                                                                    </td>
+                                                                )}
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>)}
 
-                                        <div className="col-span-2 mt-1 flex gap-1">
-                                            <span className="font-bold whitespace-nowrap">Permanent Address:</span> <Input isEditing={isEditing} value={resumeData.details.address} onChange={(v) => handleInputChange('details', 'address', v)} multiline />
-                                        </div>
-                                    </div>
-
-                                    {/* Career Objective */}
-                                    {(isEditing || resumeData.objective) && (<div className="mb-6 group relative">
-                                        <SectionTitle title="CAREER OBJECTIVE" />
-                                        <div className="text-sm text-justify leading-relaxed font-sans">
-                                            <Input isEditing={isEditing} value={resumeData.objective} onChange={(v) => handleInputChange('root', 'objective', v)} multiline />
-                                        </div>
-                                    </div>)}
-
-                                    {/* Educational Qualification */}
-                                    {(isEditing || resumeData.education.length > 0) && (<div className="mb-6">
-                                        <SectionTitle title="EDUCATIONAL QUALIFICATION" />
-                                        <SectionActions isEditing={isEditing} onAdd={() => addItem('education', { exam: "New", year: "", board: "", marks: "" })} />
-
-                                        <table className="w-full border-collapse text-sm font-sans">
-                                            <thead>
-                                                <tr className="bg-gray-50">
-                                                    <th className="border border-black p-2 w-1/6 font-bold">Examination Passed</th>
-                                                    <th className="border border-black p-2 w-1/6 font-bold">Year of Passing</th>
-                                                    <th className="border border-black p-2 w-1/2 font-bold">Board/ University</th>
-                                                    <th className="border border-black p-2 w-1/6 font-bold">% of Marks/SGPA</th>
-                                                    {isEditing && <th className="w-8 print:hidden"></th>}
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {resumeData.education.map((edu, idx) => (
-                                                    <tr key={idx} className="relative group">
-                                                        <td className="border border-black p-2 text-center align-top">
-                                                            <Input isEditing={isEditing} value={edu.exam} onChange={(v) => handleArrayChange('education', idx, 'exam', v)} />
-                                                        </td>
-                                                        <td className="border border-black p-2 text-center align-top">
-                                                            <Input isEditing={isEditing} value={edu.year} onChange={(v) => handleArrayChange('education', idx, 'year', v)} />
-                                                        </td>
-                                                        <td className="border border-black p-2 text-center align-top">
-                                                            <Input isEditing={isEditing} value={edu.board} onChange={(v) => handleArrayChange('education', idx, 'board', v)} multiline />
-                                                        </td>
-                                                        <td className="border border-black p-2 text-center align-top">
-                                                            <Input isEditing={isEditing} value={edu.marks} onChange={(v) => handleArrayChange('education', idx, 'marks', v)} />
-                                                        </td>
-                                                        {isEditing && (
-                                                            <td className="border-0 p-1 text-center align-middle print:hidden">
-                                                                <button onClick={() => removeItem('education', idx)} className="text-red-400 hover:text-red-600"><Trash2 size={16} /></button>
-                                                            </td>
-                                                        )}
-                                                    </tr>
+                                        {/* Internships */}
+                                        {(isEditing || resumeData.internships.length > 0) && (<div className="mb-6">
+                                            <SectionTitle title="INTERNSHIPS" />
+                                            <SectionActions isEditing={isEditing} onAdd={() => addItem('internships', "New Internship Details")} />
+                                            <ul className="list-disc ml-5 text-sm space-y-2 font-sans">
+                                                {resumeData.internships.map((intern, idx) => (
+                                                    <li key={idx} className="pl-2 relative group">
+                                                        <Input isEditing={isEditing} value={intern} onChange={(v) => handleArrayChange('internships', idx, null, v)} multiline />
+                                                        <DeleteButton isEditing={isEditing} onClick={() => removeItem('internships', idx)} />
+                                                    </li>
                                                 ))}
-                                            </tbody>
-                                        </table>
-                                    </div>)}
+                                            </ul>
+                                        </div>)}
 
-                                    {/* Internships */}
-                                    {(isEditing || resumeData.internships.length > 0) && (<div className="mb-6">
-                                        <SectionTitle title="INTERNSHIPS" />
-                                        <SectionActions isEditing={isEditing} onAdd={() => addItem('internships', "New Internship Details")} />
-                                        <ul className="list-disc ml-5 text-sm space-y-2 font-sans">
-                                            {resumeData.internships.map((intern, idx) => (
-                                                <li key={idx} className="pl-2 relative group">
-                                                    <Input isEditing={isEditing} value={intern} onChange={(v) => handleArrayChange('internships', idx, null, v)} multiline />
-                                                    <DeleteButton isEditing={isEditing} onClick={() => removeItem('internships', idx)} />
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>)}
+                                        {/* Experience */}
+                                        {(isEditing || resumeData.experience.length > 0) && (<div className="mb-6">
+                                            <SectionTitle title="EXPERIENCE" />
+                                            <SectionActions isEditing={isEditing} onAdd={() => addItem('experience', "New Experience Details")} />
+                                            <ul className="list-disc ml-5 text-sm space-y-4 font-sans">
+                                                {resumeData.experience.map((exp, idx) => (
+                                                    <li key={idx} className="pl-2 text-justify relative group">
+                                                        <Input isEditing={isEditing} value={exp} onChange={(v) => handleArrayChange('experience', idx, null, v)} multiline />
+                                                        <DeleteButton isEditing={isEditing} onClick={() => removeItem('experience', idx)} />
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>)}
 
-                                    {/* Experience */}
-                                    {(isEditing || resumeData.experience.length > 0) && (<div className="mb-6">
-                                        <SectionTitle title="EXPERIENCE" />
-                                        <SectionActions isEditing={isEditing} onAdd={() => addItem('experience', "New Experience Details")} />
-                                        <ul className="list-disc ml-5 text-sm space-y-4 font-sans">
-                                            {resumeData.experience.map((exp, idx) => (
-                                                <li key={idx} className="pl-2 text-justify relative group">
-                                                    <Input isEditing={isEditing} value={exp} onChange={(v) => handleArrayChange('experience', idx, null, v)} multiline />
-                                                    <DeleteButton isEditing={isEditing} onClick={() => removeItem('experience', idx)} />
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>)}
-
-                                    {/* College Projects */}
-                                    {(isEditing || resumeData.collegeProjects.length > 0) && (<div className="mb-6">
-                                        <SectionTitle title="COLLEGE PROJECTS" />
-                                        <SectionActions isEditing={isEditing} onAdd={() => addItem('collegeProjects', { title: "New Project", description: "Description" })} />
-                                        <ul className="list-disc ml-5 text-sm space-y-4 font-sans">
-                                            {resumeData.collegeProjects.map((proj, idx) => (
-                                                <li key={idx} className="pl-2 text-justify relative group">
-                                                    <div className="flex flex-col">
-                                                        <span className="font-bold"><Input isEditing={isEditing} value={proj.title} onChange={(v) => handleArrayChange('collegeProjects', idx, 'title', v)} placeholder="Project Title" /></span>
-                                                        <Input isEditing={isEditing} value={proj.description} onChange={(v) => handleArrayChange('collegeProjects', idx, 'description', v)} multiline placeholder="Description" />
-                                                    </div>
-                                                    <DeleteButton isEditing={isEditing} onClick={() => removeItem('collegeProjects', idx)} />
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>)}
-
-                                    {/* Personal Projects */}
-                                    {(isEditing || resumeData.personalProjects.length > 0) && (<div className="mb-6">
-                                        <SectionTitle title="PERSONAL PROJECTS" />
-                                        <SectionActions isEditing={isEditing} onAdd={() => addItem('personalProjects', { title: "New App/Project", description: "Description", link: "" })} />
-                                        <ul className="list-disc ml-5 text-sm space-y-4 font-sans">
-                                            {resumeData.personalProjects.map((proj, idx) => (
-                                                <li key={idx} className="pl-2 text-justify relative group">
-                                                    <div className="flex flex-col">
-                                                        <span className="font-bold"><Input isEditing={isEditing} value={proj.title} onChange={(v) => handleArrayChange('personalProjects', idx, 'title', v)} placeholder="Project Title" /></span>
-                                                        <Input isEditing={isEditing} value={proj.description} onChange={(v) => handleArrayChange('personalProjects', idx, 'description', v)} multiline placeholder="Description" />
-                                                        <div className="text-blue-700 underline break-all">
-                                                            <Input isEditing={isEditing} value={proj.link} onChange={(v) => handleArrayChange('personalProjects', idx, 'link', v)} placeholder="http://link-to-project.com" />
+                                        {/* College Projects */}
+                                        {(isEditing || resumeData.collegeProjects.length > 0) && (<div className="mb-6">
+                                            <SectionTitle title="COLLEGE PROJECTS" />
+                                            <SectionActions isEditing={isEditing} onAdd={() => addItem('collegeProjects', { title: "New Project", description: "Description" })} />
+                                            <ul className="list-disc ml-5 text-sm space-y-4 font-sans">
+                                                {resumeData.collegeProjects.map((proj, idx) => (
+                                                    <li key={idx} className="pl-2 text-justify relative group">
+                                                        <div className="flex flex-col">
+                                                            <span className="font-bold"><Input isEditing={isEditing} value={proj.title} onChange={(v) => handleArrayChange('collegeProjects', idx, 'title', v)} placeholder="Project Title" /></span>
+                                                            <Input isEditing={isEditing} value={proj.description} onChange={(v) => handleArrayChange('collegeProjects', idx, 'description', v)} multiline placeholder="Description" />
                                                         </div>
-                                                    </div>
-                                                    <DeleteButton isEditing={isEditing} onClick={() => removeItem('personalProjects', idx)} />
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>)}
+                                                        <DeleteButton isEditing={isEditing} onClick={() => removeItem('collegeProjects', idx)} />
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>)}
+
+                                        {/* Personal Projects */}
+                                        {(isEditing || resumeData.personalProjects.length > 0) && (<div className="mb-6">
+                                            <SectionTitle title="PERSONAL PROJECTS" />
+                                            <SectionActions isEditing={isEditing} onAdd={() => addItem('personalProjects', { title: "New App/Project", description: "Description", link: "" })} />
+                                            <ul className="list-disc ml-5 text-sm space-y-4 font-sans">
+                                                {resumeData.personalProjects.map((proj, idx) => (
+                                                    <li key={idx} className="pl-2 text-justify relative group">
+                                                        <div className="flex flex-col">
+                                                            <span className="font-bold"><Input isEditing={isEditing} value={proj.title} onChange={(v) => handleArrayChange('personalProjects', idx, 'title', v)} placeholder="Project Title" /></span>
+                                                            <Input isEditing={isEditing} value={proj.description} onChange={(v) => handleArrayChange('personalProjects', idx, 'description', v)} multiline placeholder="Description" />
+                                                            <div className="text-blue-700 underline break-all">
+                                                                <Input isEditing={isEditing} value={proj.link} onChange={(v) => handleArrayChange('personalProjects', idx, 'link', v)} placeholder="http://link-to-project.com" />
+                                                            </div>
+                                                        </div>
+                                                        <DeleteButton isEditing={isEditing} onClick={() => removeItem('personalProjects', idx)} />
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>)}
 
 
-                                    {/* Certifications */}
-                                    {(isEditing || resumeData.certifications.length > 0) && (<div className="mb-6">
-                                        <SectionTitle title="CERTIFICATIONS" />
-                                        <SectionActions isEditing={isEditing} onAdd={() => addItem('certifications', { title: "Certification", description: "Issuer/Year" })} />
-                                        <ul className="list-disc ml-5 text-sm space-y-4 font-sans">
-                                            {resumeData.certifications.map((cert, idx) => (
-                                                <li key={idx} className="pl-2 text-justify relative group">
-                                                    <div className="flex flex-col">
-                                                        <span className="font-bold"><Input isEditing={isEditing} value={cert.title} onChange={(v) => handleArrayChange('certifications', idx, 'title', v)} placeholder="Certification Title" /></span>
-                                                        <Input isEditing={isEditing} value={cert.description} onChange={(v) => handleArrayChange('certifications', idx, 'description', v)} multiline placeholder="Issuing Authority / Details" />
-                                                    </div>
-                                                    <DeleteButton isEditing={isEditing} onClick={() => removeItem('certifications', idx)} />
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>)}
+                                        {/* Certifications */}
+                                        {(isEditing || resumeData.certifications.length > 0) && (<div className="mb-6">
+                                            <SectionTitle title="CERTIFICATIONS" />
+                                            <SectionActions isEditing={isEditing} onAdd={() => addItem('certifications', { title: "Certification", description: "Issuer/Year" })} />
+                                            <ul className="list-disc ml-5 text-sm space-y-4 font-sans">
+                                                {resumeData.certifications.map((cert, idx) => (
+                                                    <li key={idx} className="pl-2 text-justify relative group">
+                                                        <div className="flex flex-col">
+                                                            <span className="font-bold"><Input isEditing={isEditing} value={cert.title} onChange={(v) => handleArrayChange('certifications', idx, 'title', v)} placeholder="Certification Title" /></span>
+                                                            <Input isEditing={isEditing} value={cert.description} onChange={(v) => handleArrayChange('certifications', idx, 'description', v)} multiline placeholder="Issuing Authority / Details" />
+                                                        </div>
+                                                        <DeleteButton isEditing={isEditing} onClick={() => removeItem('certifications', idx)} />
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>)}
 
-                                    {/* Technical Skills */}
-                                    {(isEditing || resumeData.technicalSkills.length > 0) && (<div className="mb-6">
-                                        <SectionTitle title="TECHNICAL SKILLS" />
-                                        <SectionActions isEditing={isEditing} onAdd={() => addItem('technicalSkills', "New Skill")} />
-                                        <ul className="list-disc ml-5 text-sm space-y-1 font-sans">
-                                            {resumeData.technicalSkills.map((skill, idx) => (
-                                                <li key={idx} className="pl-2 relative group">
-                                                    <Input isEditing={isEditing} value={skill} onChange={(v) => handleArrayChange('technicalSkills', idx, null, v)} />
-                                                    <DeleteButton isEditing={isEditing} onClick={() => removeItem('technicalSkills', idx)} />
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>)}
+                                        {/* Technical Skills */}
+                                        {(isEditing || resumeData.technicalSkills.length > 0) && (<div className="mb-6">
+                                            <SectionTitle title="TECHNICAL SKILLS" />
+                                            <SectionActions isEditing={isEditing} onAdd={() => addItem('technicalSkills', "New Skill")} />
+                                            <ul className="list-disc ml-5 text-sm space-y-1 font-sans">
+                                                {resumeData.technicalSkills.map((skill, idx) => (
+                                                    <li key={idx} className="pl-2 relative group">
+                                                        <Input isEditing={isEditing} value={skill} onChange={(v) => handleArrayChange('technicalSkills', idx, null, v)} />
+                                                        <DeleteButton isEditing={isEditing} onClick={() => removeItem('technicalSkills', idx)} />
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>)}
 
-                                    {/* Soft Skills */}
-                                    {(isEditing || resumeData.softSkills.length > 0) && (<div className="mb-6">
-                                        <SectionTitle title="SOFT SKILLS" />
-                                        <SectionActions isEditing={isEditing} onAdd={() => addItem('softSkills', "New Skill")} />
-                                        <ul className="list-disc ml-5 text-sm space-y-1 font-sans">
-                                            {resumeData.softSkills.map((skill, idx) => (
-                                                <li key={idx} className="pl-2 relative group">
-                                                    <Input isEditing={isEditing} value={skill} onChange={(v) => handleArrayChange('softSkills', idx, null, v)} />
-                                                    <DeleteButton isEditing={isEditing} onClick={() => removeItem('softSkills', idx)} />
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>)}
+                                        {/* Soft Skills */}
+                                        {(isEditing || resumeData.softSkills.length > 0) && (<div className="mb-6">
+                                            <SectionTitle title="SOFT SKILLS" />
+                                            <SectionActions isEditing={isEditing} onAdd={() => addItem('softSkills', "New Skill")} />
+                                            <ul className="list-disc ml-5 text-sm space-y-1 font-sans">
+                                                {resumeData.softSkills.map((skill, idx) => (
+                                                    <li key={idx} className="pl-2 relative group">
+                                                        <Input isEditing={isEditing} value={skill} onChange={(v) => handleArrayChange('softSkills', idx, null, v)} />
+                                                        <DeleteButton isEditing={isEditing} onClick={() => removeItem('softSkills', idx)} />
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>)}
 
-                                    {/* Extra Curricular */}
-                                    {(isEditing || resumeData.activities.length > 0) && (<div className="mb-6">
-                                        <SectionTitle title="EXTRA-CURRICULAR ACTIVITIES" />
-                                        <SectionActions isEditing={isEditing} onAdd={() => addItem('activities', { title: "New Activity", description: "Details" })} />
-                                        <ul className="list-disc ml-5 text-sm space-y-4 font-sans">
-                                            {resumeData.activities.map((act, idx) => (
-                                                <li key={idx} className="pl-2 text-justify relative group">
-                                                    <div className="flex flex-col">
-                                                        <span className="font-bold"><Input isEditing={isEditing} value={act.title} onChange={(v) => handleArrayChange('activities', idx, 'title', v)} /></span>
-                                                        <Input isEditing={isEditing} value={act.description} onChange={(v) => handleArrayChange('activities', idx, 'description', v)} multiline />
-                                                    </div>
-                                                    <DeleteButton isEditing={isEditing} onClick={() => removeItem('activities', idx)} />
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>)}
+                                        {/* Extra Curricular */}
+                                        {(isEditing || resumeData.activities.length > 0) && (<div className="mb-6">
+                                            <SectionTitle title="EXTRA-CURRICULAR ACTIVITIES" />
+                                            <SectionActions isEditing={isEditing} onAdd={() => addItem('activities', { title: "New Activity", description: "Details" })} />
+                                            <ul className="list-disc ml-5 text-sm space-y-4 font-sans">
+                                                {resumeData.activities.map((act, idx) => (
+                                                    <li key={idx} className="pl-2 text-justify relative group">
+                                                        <div className="flex flex-col">
+                                                            <span className="font-bold"><Input isEditing={isEditing} value={act.title} onChange={(v) => handleArrayChange('activities', idx, 'title', v)} /></span>
+                                                            <Input isEditing={isEditing} value={act.description} onChange={(v) => handleArrayChange('activities', idx, 'description', v)} multiline />
+                                                        </div>
+                                                        <DeleteButton isEditing={isEditing} onClick={() => removeItem('activities', idx)} />
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>)}
 
-                                    {/* Strengths */}
-                                    {(isEditing || resumeData.strengths.length > 0) && (<div className="mb-6">
-                                        <SectionTitle title="STRENGTHS" />
-                                        <SectionActions isEditing={isEditing} onAdd={() => addItem('strengths', "New Strength")} />
-                                        <ul className="list-disc ml-5 text-sm space-y-1 font-sans">
-                                            {resumeData.strengths.map((str, idx) => (
-                                                <li key={idx} className="pl-2 relative group">
-                                                    <Input isEditing={isEditing} value={str} onChange={(v) => handleArrayChange('strengths', idx, null, v)} />
-                                                    <DeleteButton isEditing={isEditing} onClick={() => removeItem('strengths', idx)} />
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>)}
+                                        {/* Strengths */}
+                                        {(isEditing || resumeData.strengths.length > 0) && (<div className="mb-6">
+                                            <SectionTitle title="STRENGTHS" />
+                                            <SectionActions isEditing={isEditing} onAdd={() => addItem('strengths', "New Strength")} />
+                                            <ul className="list-disc ml-5 text-sm space-y-1 font-sans">
+                                                {resumeData.strengths.map((str, idx) => (
+                                                    <li key={idx} className="pl-2 relative group">
+                                                        <Input isEditing={isEditing} value={str} onChange={(v) => handleArrayChange('strengths', idx, null, v)} />
+                                                        <DeleteButton isEditing={isEditing} onClick={() => removeItem('strengths', idx)} />
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>)}
 
-                                    {/* Interests */}
-                                    {(isEditing || resumeData.interests.length > 0) && (<div className="mb-6">
-                                        <SectionTitle title="INTERESTS" />
-                                        <SectionActions isEditing={isEditing} onAdd={() => addItem('interests', "New Interest")} />
-                                        <ul className="list-disc ml-5 text-sm space-y-1 font-sans">
-                                            {resumeData.interests.map((int, idx) => (
-                                                <li key={idx} className="pl-2 relative group">
-                                                    <Input isEditing={isEditing} value={int} onChange={(v) => handleArrayChange('interests', idx, null, v)} />
-                                                    <DeleteButton isEditing={isEditing} onClick={() => removeItem('interests', idx)} />
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>)}
+                                        {/* Interests */}
+                                        {(isEditing || resumeData.interests.length > 0) && (<div className="mb-6">
+                                            <SectionTitle title="INTERESTS" />
+                                            <SectionActions isEditing={isEditing} onAdd={() => addItem('interests', "New Interest")} />
+                                            <ul className="list-disc ml-5 text-sm space-y-1 font-sans">
+                                                {resumeData.interests.map((int, idx) => (
+                                                    <li key={idx} className="pl-2 relative group">
+                                                        <Input isEditing={isEditing} value={int} onChange={(v) => handleArrayChange('interests', idx, null, v)} />
+                                                        <DeleteButton isEditing={isEditing} onClick={() => removeItem('interests', idx)} />
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>)}
 
-                                    {/* Social Profiles */}
-                                    {(isEditing || resumeData.socials.length > 0) && (<div className="mb-6">
-                                        <SectionTitle title="SOCIAL PROFILES" />
-                                        <SectionActions isEditing={isEditing} onAdd={() => addItem('socials', { platform: "Platform", link: "Link" })} />
-                                        <ul className="list-disc ml-5 text-sm space-y-1 font-sans">
-                                            {resumeData.socials.map((social, idx) => (
-                                                <li key={idx} className="pl-2 relative group flex gap-1 items-center">
-                                                    <div className="w-24 shrink-0">
-                                                        <Input isEditing={isEditing} value={social.platform} onChange={(v) => handleArrayChange('socials', idx, 'platform', v)} placeholder="Platform" />
-                                                    </div>
-                                                    <span>:-</span>
-                                                    <div className="text-blue-700 underline flex-grow">
-                                                        <Input isEditing={isEditing} value={social.link} onChange={(v) => handleArrayChange('socials', idx, 'link', v)} placeholder="Link" />
-                                                    </div>
-                                                    <DeleteButton isEditing={isEditing} onClick={() => removeItem('socials', idx)} />
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>)}
+                                        {/* Social Profiles */}
+                                        {(isEditing || resumeData.socials.length > 0) && (<div className="mb-6">
+                                            <SectionTitle title="SOCIAL PROFILES" />
+                                            <SectionActions isEditing={isEditing} onAdd={() => addItem('socials', { platform: "Platform", link: "Link" })} />
+                                            <ul className="list-disc ml-5 text-sm space-y-1 font-sans">
+                                                {resumeData.socials.map((social, idx) => (
+                                                    <li key={idx} className="pl-2 relative group flex gap-1 items-center">
+                                                        <div className="w-24 shrink-0">
+                                                            <Input isEditing={isEditing} value={social.platform} onChange={(v) => handleArrayChange('socials', idx, 'platform', v)} placeholder="Platform" />
+                                                        </div>
+                                                        <span>:-</span>
+                                                        <div className="text-blue-700 underline flex-grow">
+                                                            <Input isEditing={isEditing} value={social.link} onChange={(v) => handleArrayChange('socials', idx, 'link', v)} placeholder="Link" />
+                                                        </div>
+                                                        <DeleteButton isEditing={isEditing} onClick={() => removeItem('socials', idx)} />
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>)}
 
-                                    {/* Declaration */}
-                                    {(isEditing || resumeData.declaration.text) && (<div className="mb-6 mt-10 font-sans">
-                                        <SectionTitle title="DECLARATION" />
-                                        <p className="text-sm mb-6">
-                                            <Input isEditing={isEditing} value={resumeData.declaration.text} onChange={(v) => handleInputChange('declaration', 'text', v)} multiline />
-                                        </p>
+                                        {/* Declaration */}
+                                        {(isEditing || resumeData.declaration.text) && (<div className="mb-6 mt-10 font-sans">
+                                            <SectionTitle title="DECLARATION" />
+                                            <p className="text-sm mb-6">
+                                                <Input isEditing={isEditing} value={resumeData.declaration.text} onChange={(v) => handleInputChange('declaration', 'text', v)} multiline />
+                                            </p>
 
-                                        <div className="text-sm font-bold mb-8 flex gap-1">
-                                            Name: <Input isEditing={isEditing} value={resumeData.name} onChange={(v) => handleInputChange('root', 'name', v)} />
-                                        </div>
+                                            <div className="text-sm font-bold mb-8 flex gap-1">
+                                                Name: <Input isEditing={isEditing} value={resumeData.name} onChange={(v) => handleInputChange('root', 'name', v)} />
+                                            </div>
 
-                                        <div className="grid grid-cols-2 text-sm font-bold gap-8">
-                                            <div className="flex gap-1">Place: <Input isEditing={isEditing} value={resumeData.declaration.place} onChange={(v) => handleInputChange('declaration', 'place', v)} /></div>
-                                            <div className="flex gap-1">Date: <Input isEditing={isEditing} value={resumeData.declaration.date} onChange={(v) => handleInputChange('declaration', 'date', v)} /></div>
-                                        </div>
-                                    </div>)}
-                                </td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr><td className="h-[20mm]"></td></tr>
-                        </tfoot>
-                    </table>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 text-sm font-bold gap-4 md:gap-8 print:gap-8">
+                                                <div className="flex gap-1">Place: <Input isEditing={isEditing} value={resumeData.declaration.place} onChange={(v) => handleInputChange('declaration', 'place', v)} /></div>
+                                                <div className="flex gap-1">Date: <Input isEditing={isEditing} value={resumeData.declaration.date} onChange={(v) => handleInputChange('declaration', 'date', v)} /></div>
+                                            </div>
+                                        </div>)}
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr><td className="h-[20mm]"></td></tr>
+                            </tfoot>
+                        </table>
+                    </div>
                 </div>
-            </div>
 
-            <div className="py-6 text-gray-500 font-medium text-sm print:hidden">
-                Built with ❤️ for IMED students.
+                <div className="py-6 text-gray-500 font-medium text-sm print:hidden text-center">
+                    Built with ❤️ for IMED students.
+                </div>
             </div>
         </div>
     );
