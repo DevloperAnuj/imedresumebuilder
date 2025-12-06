@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Trash2, Printer, Eye, Edit2 } from 'lucide-react';
+import { Plus, Trash2, Printer, Eye, Edit2, Info, X } from 'lucide-react';
 
 import headerImg from './Untitled.png';
 
@@ -62,8 +62,48 @@ const DeleteButton = ({ onClick, isEditing }) => {
     );
 };
 
+// --- Modal Component ---
+const InfoModal = ({ isOpen, onClose }) => {
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 transition-all">
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden animate-in fade-in zoom-in duration-300">
+                {/* Header */}
+                <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-6 flex justify-between items-center text-white">
+                    <h2 className="text-xl font-bold flex items-center gap-2">
+                        <Info size={24} /> About IMED Resume Builder
+                    </h2>
+                    <button onClick={onClose} className="hover:bg-white/20 p-1 rounded-full transition-colors">
+                        <X size={24} />
+                    </button>
+                </div>
+
+                {/* Body */}
+                <div className="p-8 text-gray-700 space-y-4">
+                    <p className="leading-relaxed text-lg text-gray-600">
+                        This is a <span className="font-semibold text-blue-600">hobby project</span> designed to help students of
+                        <span className="font-bold text-gray-900"> IMED (Institute of Management and Entrepreneurship Development, Pune ) </span>
+                        build their institutional resumes hassle-free.
+                    </p>
+                    <p className="leading-relaxed">
+                        It provides a clean, standardized format that aligns with institutional requirements, ensuring consistency and professionalism.
+                    </p>
+
+                    <div className="mt-8 pt-6 border-t border-gray-100 flex flex-col items-center justify-center text-center">
+                        <p className="text-sm font-medium text-gray-500 italic">
+                            Built with ❤️ for IMED students.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 const ResumeBuilder = () => {
     const [isEditing, setIsEditing] = useState(true);
+    const [showInfo, setShowInfo] = useState(false);
 
     // --- Initial State ---
     const [resumeData, setResumeData] = useState({
@@ -193,11 +233,19 @@ const ResumeBuilder = () => {
 
     return (
         <div className="min-h-screen bg-gray-200 font-sans flex flex-col items-center">
+            <InfoModal isOpen={showInfo} onClose={() => setShowInfo(false)} />
 
             {/* --- Toolbar --- */}
             <div className="w-full bg-white shadow-md p-4 sticky top-0 z-50 print:hidden flex justify-between items-center">
                 <h1 className="text-xl font-bold text-gray-800">IMED Resume Builder</h1>
                 <div className="flex gap-4">
+                    <button
+                        onClick={() => setShowInfo(true)}
+                        className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors flex items-center justify-center"
+                        title="About Project"
+                    >
+                        <Info size={24} />
+                    </button>
                     <div className="flex bg-gray-100 p-1 rounded-lg">
                         <button
                             onClick={() => setIsEditing(true)}
