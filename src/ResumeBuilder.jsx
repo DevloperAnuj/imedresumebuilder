@@ -513,6 +513,10 @@ const ResumeBuilder = () => {
                     </table>
                 </div>
             </div>
+
+            <div className="py-6 text-gray-500 font-medium text-sm print:hidden">
+                Built with ❤️ for IMED students.
+            </div>
         </div>
     );
 };
