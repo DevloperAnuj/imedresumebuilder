@@ -144,10 +144,9 @@ const ResumeBuilder = () => {
         certifications: [
             { title: "Course on Computer Concepts (CCC)", description: "NIELIT, 2023" }
         ],
-        technicalSkills: {
-            col1: ["Python", "Java", "SQL", "HTML/CSS", "JavaScript"],
-            col2: ["Git", "Docker", "AWS Basic", "Microsoft Office Suite"]
-        },
+        technicalSkills: [
+            "Python", "Java", "SQL", "Microsoft Office Suite"
+        ],
         softSkills: ["Team Leadership", "Problem Solving", "Effective Communication", "Time Management"],
         activities: [
             { title: "Volunteer at Local NGO", description: "Organized community cleanup drives and awareness campaigns about environmental conservation." }
@@ -194,32 +193,7 @@ const ResumeBuilder = () => {
         setResumeData({ ...resumeData, [section]: newArray });
     };
 
-    const handleTechSkillChange = (col, index, value) => {
-        const newCols = [...resumeData.technicalSkills[col]];
-        newCols[index] = value;
-        setResumeData({
-            ...resumeData,
-            technicalSkills: { ...resumeData.technicalSkills, [col]: newCols }
-        });
-    };
-
-    const addTechSkill = (col) => {
-        const newCols = [...resumeData.technicalSkills[col], "New Skill"];
-        setResumeData({
-            ...resumeData,
-            technicalSkills: { ...resumeData.technicalSkills, [col]: newCols }
-        });
-    };
-
-    const removeTechSkill = (col, index) => {
-        const newCols = [...resumeData.technicalSkills[col]];
-        newCols.splice(index, 1);
-        setResumeData({
-            ...resumeData,
-            technicalSkills: { ...resumeData.technicalSkills, [col]: newCols }
-        });
-    };
-
+    // Generic handlers used for all array sections now
     const handlePrint = () => {
         // Ensure we are in preview mode before printing
         setIsEditing(false);
@@ -450,32 +424,17 @@ const ResumeBuilder = () => {
                                     </div>)}
 
                                     {/* Technical Skills */}
-                                    {(isEditing || resumeData.technicalSkills.col1.length > 0 || resumeData.technicalSkills.col2.length > 0) && (<div className="mb-6">
+                                    {(isEditing || resumeData.technicalSkills.length > 0) && (<div className="mb-6">
                                         <SectionTitle title="TECHNICAL SKILLS" />
-                                        <div className="grid grid-cols-2 gap-4 text-sm ml-5 font-sans">
-                                            <div className="relative group">
-                                                <SectionActions isEditing={isEditing} onAdd={() => addTechSkill('col1')} />
-                                                <ul className="list-disc pl-2">
-                                                    {resumeData.technicalSkills.col1.map((skill, idx) => (
-                                                        <li key={idx} className="relative group">
-                                                            <Input isEditing={isEditing} value={skill} onChange={(v) => handleTechSkillChange('col1', idx, v)} />
-                                                            <DeleteButton isEditing={isEditing} onClick={() => removeTechSkill('col1', idx)} />
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                            <div className="relative group">
-                                                <SectionActions isEditing={isEditing} onAdd={() => addTechSkill('col2')} />
-                                                <ul className="list-disc pl-2">
-                                                    {resumeData.technicalSkills.col2.map((skill, idx) => (
-                                                        <li key={idx} className="relative group">
-                                                            <Input isEditing={isEditing} value={skill} onChange={(v) => handleTechSkillChange('col2', idx, v)} />
-                                                            <DeleteButton isEditing={isEditing} onClick={() => removeTechSkill('col2', idx)} />
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                        </div>
+                                        <SectionActions isEditing={isEditing} onAdd={() => addItem('technicalSkills', "New Skill")} />
+                                        <ul className="list-disc ml-5 text-sm space-y-1 font-sans">
+                                            {resumeData.technicalSkills.map((skill, idx) => (
+                                                <li key={idx} className="pl-2 relative group">
+                                                    <Input isEditing={isEditing} value={skill} onChange={(v) => handleArrayChange('technicalSkills', idx, null, v)} />
+                                                    <DeleteButton isEditing={isEditing} onClick={() => removeItem('technicalSkills', idx)} />
+                                                </li>
+                                            ))}
+                                        </ul>
                                     </div>)}
 
                                     {/* Soft Skills */}
