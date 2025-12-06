@@ -101,6 +101,9 @@ const ResumeBuilder = () => {
             { title: "Budget Tracker App", description: "A mobile application to help students manage their monthly expenses. Features include expense categorization and visual reports.", link: "https://play.google.com/store/apps/details?id=com.example.budget" },
             { title: "Portfolio Website", description: "Designed and deployed a personal portfolio website to showcase academic and professional achievements.", link: "https://johndoe.com" }
         ],
+        certifications: [
+            { title: "Course on Computer Concepts (CCC)", description: "NIELIT, 2023" }
+        ],
         technicalSkills: {
             col1: ["Python", "Java", "SQL", "HTML/CSS", "JavaScript"],
             col2: ["Git", "Docker", "AWS Basic", "Microsoft Office Suite"]
@@ -267,15 +270,15 @@ const ResumeBuilder = () => {
                                     </div>
 
                                     {/* Career Objective */}
-                                    <div className="mb-6 group relative">
+                                    {(isEditing || resumeData.objective) && (<div className="mb-6 group relative">
                                         <SectionTitle title="CAREER OBJECTIVE" />
                                         <div className="text-sm text-justify leading-relaxed font-sans">
                                             <Input isEditing={isEditing} value={resumeData.objective} onChange={(v) => handleInputChange('root', 'objective', v)} multiline />
                                         </div>
-                                    </div>
+                                    </div>)}
 
                                     {/* Educational Qualification */}
-                                    <div className="mb-6">
+                                    {(isEditing || resumeData.education.length > 0) && (<div className="mb-6">
                                         <SectionTitle title="EDUCATIONAL QUALIFICATION" />
                                         <SectionActions isEditing={isEditing} onAdd={() => addItem('education', { exam: "New", year: "", board: "", marks: "" })} />
 
@@ -313,10 +316,10 @@ const ResumeBuilder = () => {
                                                 ))}
                                             </tbody>
                                         </table>
-                                    </div>
+                                    </div>)}
 
                                     {/* Internships */}
-                                    <div className="mb-6">
+                                    {(isEditing || resumeData.internships.length > 0) && (<div className="mb-6">
                                         <SectionTitle title="INTERNSHIPS" />
                                         <SectionActions isEditing={isEditing} onAdd={() => addItem('internships', "New Internship Details")} />
                                         <ul className="list-disc ml-5 text-sm space-y-2 font-sans">
@@ -327,10 +330,10 @@ const ResumeBuilder = () => {
                                                 </li>
                                             ))}
                                         </ul>
-                                    </div>
+                                    </div>)}
 
                                     {/* Experience */}
-                                    <div className="mb-6">
+                                    {(isEditing || resumeData.experience.length > 0) && (<div className="mb-6">
                                         <SectionTitle title="EXPERIENCE" />
                                         <SectionActions isEditing={isEditing} onAdd={() => addItem('experience', "New Experience Details")} />
                                         <ul className="list-disc ml-5 text-sm space-y-4 font-sans">
@@ -341,10 +344,10 @@ const ResumeBuilder = () => {
                                                 </li>
                                             ))}
                                         </ul>
-                                    </div>
+                                    </div>)}
 
                                     {/* College Projects */}
-                                    <div className="mb-6">
+                                    {(isEditing || resumeData.collegeProjects.length > 0) && (<div className="mb-6">
                                         <SectionTitle title="COLLEGE PROJECTS" />
                                         <SectionActions isEditing={isEditing} onAdd={() => addItem('collegeProjects', { title: "New Project", description: "Description" })} />
                                         <ul className="list-disc ml-5 text-sm space-y-4 font-sans">
@@ -358,10 +361,10 @@ const ResumeBuilder = () => {
                                                 </li>
                                             ))}
                                         </ul>
-                                    </div>
+                                    </div>)}
 
                                     {/* Personal Projects */}
-                                    <div className="mb-6">
+                                    {(isEditing || resumeData.personalProjects.length > 0) && (<div className="mb-6">
                                         <SectionTitle title="PERSONAL PROJECTS" />
                                         <SectionActions isEditing={isEditing} onAdd={() => addItem('personalProjects', { title: "New App/Project", description: "Description", link: "" })} />
                                         <ul className="list-disc ml-5 text-sm space-y-4 font-sans">
@@ -378,10 +381,28 @@ const ResumeBuilder = () => {
                                                 </li>
                                             ))}
                                         </ul>
-                                    </div>
+                                    </div>)}
+
+
+                                    {/* Certifications */}
+                                    {(isEditing || resumeData.certifications.length > 0) && (<div className="mb-6">
+                                        <SectionTitle title="CERTIFICATIONS" />
+                                        <SectionActions isEditing={isEditing} onAdd={() => addItem('certifications', { title: "Certification", description: "Issuer/Year" })} />
+                                        <ul className="list-disc ml-5 text-sm space-y-4 font-sans">
+                                            {resumeData.certifications.map((cert, idx) => (
+                                                <li key={idx} className="pl-2 text-justify relative group">
+                                                    <div className="flex flex-col">
+                                                        <span className="font-bold"><Input isEditing={isEditing} value={cert.title} onChange={(v) => handleArrayChange('certifications', idx, 'title', v)} placeholder="Certification Title" /></span>
+                                                        <Input isEditing={isEditing} value={cert.description} onChange={(v) => handleArrayChange('certifications', idx, 'description', v)} multiline placeholder="Issuing Authority / Details" />
+                                                    </div>
+                                                    <DeleteButton isEditing={isEditing} onClick={() => removeItem('certifications', idx)} />
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>)}
 
                                     {/* Technical Skills */}
-                                    <div className="mb-6">
+                                    {(isEditing || resumeData.technicalSkills.col1.length > 0 || resumeData.technicalSkills.col2.length > 0) && (<div className="mb-6">
                                         <SectionTitle title="TECHNICAL SKILLS" />
                                         <div className="grid grid-cols-2 gap-4 text-sm ml-5 font-sans">
                                             <div className="relative group">
@@ -407,10 +428,10 @@ const ResumeBuilder = () => {
                                                 </ul>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>)}
 
                                     {/* Soft Skills */}
-                                    <div className="mb-6">
+                                    {(isEditing || resumeData.softSkills.length > 0) && (<div className="mb-6">
                                         <SectionTitle title="SOFT SKILLS" />
                                         <SectionActions isEditing={isEditing} onAdd={() => addItem('softSkills', "New Skill")} />
                                         <ul className="list-disc ml-5 text-sm space-y-1 font-sans">
@@ -421,10 +442,10 @@ const ResumeBuilder = () => {
                                                 </li>
                                             ))}
                                         </ul>
-                                    </div>
+                                    </div>)}
 
                                     {/* Extra Curricular */}
-                                    <div className="mb-6">
+                                    {(isEditing || resumeData.activities.length > 0) && (<div className="mb-6">
                                         <SectionTitle title="EXTRA-CURRICULAR ACTIVITIES" />
                                         <SectionActions isEditing={isEditing} onAdd={() => addItem('activities', { title: "New Activity", description: "Details" })} />
                                         <ul className="list-disc ml-5 text-sm space-y-4 font-sans">
@@ -438,10 +459,10 @@ const ResumeBuilder = () => {
                                                 </li>
                                             ))}
                                         </ul>
-                                    </div>
+                                    </div>)}
 
                                     {/* Strengths */}
-                                    <div className="mb-6">
+                                    {(isEditing || resumeData.strengths.length > 0) && (<div className="mb-6">
                                         <SectionTitle title="STRENGTHS" />
                                         <SectionActions isEditing={isEditing} onAdd={() => addItem('strengths', "New Strength")} />
                                         <ul className="list-disc ml-5 text-sm space-y-1 font-sans">
@@ -452,10 +473,10 @@ const ResumeBuilder = () => {
                                                 </li>
                                             ))}
                                         </ul>
-                                    </div>
+                                    </div>)}
 
                                     {/* Interests */}
-                                    <div className="mb-6">
+                                    {(isEditing || resumeData.interests.length > 0) && (<div className="mb-6">
                                         <SectionTitle title="INTERESTS" />
                                         <SectionActions isEditing={isEditing} onAdd={() => addItem('interests', "New Interest")} />
                                         <ul className="list-disc ml-5 text-sm space-y-1 font-sans">
@@ -466,10 +487,10 @@ const ResumeBuilder = () => {
                                                 </li>
                                             ))}
                                         </ul>
-                                    </div>
+                                    </div>)}
 
                                     {/* Social Profiles */}
-                                    <div className="mb-6">
+                                    {(isEditing || resumeData.socials.length > 0) && (<div className="mb-6">
                                         <SectionTitle title="SOCIAL PROFILES" />
                                         <SectionActions isEditing={isEditing} onAdd={() => addItem('socials', { platform: "Platform", link: "Link" })} />
                                         <ul className="list-disc ml-5 text-sm space-y-1 font-sans">
@@ -486,10 +507,10 @@ const ResumeBuilder = () => {
                                                 </li>
                                             ))}
                                         </ul>
-                                    </div>
+                                    </div>)}
 
                                     {/* Declaration */}
-                                    <div className="mb-6 mt-10 font-sans">
+                                    {(isEditing || resumeData.declaration.text) && (<div className="mb-6 mt-10 font-sans">
                                         <SectionTitle title="DECLARATION" />
                                         <p className="text-sm mb-6">
                                             <Input isEditing={isEditing} value={resumeData.declaration.text} onChange={(v) => handleInputChange('declaration', 'text', v)} multiline />
@@ -503,7 +524,7 @@ const ResumeBuilder = () => {
                                             <div className="flex gap-1">Place: <Input isEditing={isEditing} value={resumeData.declaration.place} onChange={(v) => handleInputChange('declaration', 'place', v)} /></div>
                                             <div className="flex gap-1">Date: <Input isEditing={isEditing} value={resumeData.declaration.date} onChange={(v) => handleInputChange('declaration', 'date', v)} /></div>
                                         </div>
-                                    </div>
+                                    </div>)}
                                 </td>
                             </tr>
                         </tbody>
