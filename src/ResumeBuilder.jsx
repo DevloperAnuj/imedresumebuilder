@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Trash2, Printer, Eye, Edit2, Info, X } from 'lucide-react';
+import { Plus, Trash2, Printer, Eye, Edit2, Info, X, Linkedin } from 'lucide-react';
 
 import headerImg from './Untitled.png';
 
@@ -80,7 +80,7 @@ const InfoModal = ({ isOpen, onClose }) => {
                 </div>
 
                 {/* Body */}
-                <div className="p-8 text-gray-700 space-y-4">
+                <div className="p-8 text-gray-700 space-y-4 text-center">
                     <p className="leading-relaxed text-lg text-gray-600">
                         This is a <span className="font-semibold text-blue-600">hobby project</span> designed to help students of
                         <span className="font-bold text-gray-900"> IMED (Institute of Management and Entrepreneurship Development, Pune ) </span>
@@ -90,10 +90,19 @@ const InfoModal = ({ isOpen, onClose }) => {
                         It provides a clean, standardized format that aligns with institutional requirements, ensuring consistency and professionalism.
                     </p>
 
-                    <div className="mt-8 pt-6 border-t border-gray-100 flex flex-col items-center justify-center text-center">
+                    <div className="mt-8 pt-6 border-t border-gray-100 flex flex-col items-center justify-center text-center gap-4">
+                        <a
+                            href="https://www.linkedin.com/in/anujkamble/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 bg-[#0077b5] text-white px-6 py-2 rounded-full font-medium hover:bg-[#006399] transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                        >
+                            <Linkedin size={18} /> Connect
+                        </a>
                         <p className="text-sm font-medium text-gray-500 italic">
                             Built with ❤️ for IMED students.
                         </p>
+
                     </div>
                 </div>
             </div>
