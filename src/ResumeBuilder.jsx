@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
-import { Plus, Trash2, Printer, Eye, Edit2, Info, X, Linkedin } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Plus, Trash2, Printer, Eye, Edit2, Info, X, Linkedin, Users } from 'lucide-react';
+import { ref, runTransaction, onValue } from "firebase/database";
+import { db } from './firebase';
 
 import headerImg from './Untitled.png';
 
@@ -113,6 +115,37 @@ const InfoModal = ({ isOpen, onClose }) => {
 const ResumeBuilder = () => {
     const [isEditing, setIsEditing] = useState(true);
     const [showInfo, setShowInfo] = useState(false);
+    const [visitCount, setVisitCount] = useState(null);
+    const dataFetchedRef = useRef(false);
+
+    useEffect(() => {
+        const visitsRef = ref(db, 'visits');
+
+        // Listen for updates (Always active to ensure UI updates)
+        const unsubscribe = onValue(visitsRef, (snapshot) => {
+            setVisitCount(snapshot.val());
+        });
+
+        // Prevent double counting in Strict Mode
+        if (dataFetchedRef.current) return () => unsubscribe();
+        dataFetchedRef.current = true;
+
+        // Increment visit count with logging
+        runTransaction(visitsRef, (currentVisits) => {
+            console.log("Attempting to increment. Current:", currentVisits);
+            return (currentVisits || 0) + 1;
+        }).then((result) => {
+            if (result.committed) {
+                console.log("Increment success:", result.snapshot.val());
+            } else {
+                console.warn("Increment aborted");
+            }
+        }).catch((err) => {
+            console.error("Transaction failed:", err);
+        });
+
+        return () => unsubscribe();
+    }, []);
 
     // --- Initial State ---
     const [resumeData, setResumeData] = useState({
@@ -557,6 +590,12 @@ const ResumeBuilder = () => {
 
                 <div className="py-6 text-gray-500 font-medium text-sm print:hidden text-center">
                     Built with ❤️ for IMED students.
+                    {visitCount !== null && (
+                        <div className="flex items-center justify-center gap-2 mt-2 text-xs text-gray-400">
+                            <Users size={12} />
+                            <span>{visitCount} Visits</span>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
