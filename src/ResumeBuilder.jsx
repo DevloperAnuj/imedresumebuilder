@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Plus, Trash2, Printer, Eye, Edit2, Info, X, Linkedin, Users } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Plus, Trash2, Printer, Eye, Edit2, Info, X, Linkedin, Users, ArrowLeft } from 'lucide-react';
 import { ref, runTransaction, onValue } from "firebase/database";
 import { db } from './firebase';
 
@@ -113,8 +114,8 @@ const InfoModal = ({ isOpen, onClose }) => {
 };
 
 const ResumeBuilder = () => {
+    const navigate = useNavigate();
     const [isEditing, setIsEditing] = useState(true);
-    const [showInfo, setShowInfo] = useState(false);
     const [visitCount, setVisitCount] = useState(null);
     const dataFetchedRef = useRef(false);
 
@@ -300,46 +301,57 @@ const ResumeBuilder = () => {
 
     return (
         <div className="h-screen bg-white md:bg-gray-200 font-sans flex flex-col overflow-hidden print:h-auto print:overflow-visible">
-            <InfoModal isOpen={showInfo} onClose={() => setShowInfo(false)} />
-
             {/* --- Toolbar --- */}
-            <div className="w-full bg-white shadow-md p-4 z-10 relative print:hidden flex flex-col md:flex-row justify-between items-center gap-4">
-                <h1 className="text-xl font-bold text-gray-800">IMED Resume Builder</h1>
-                <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto items-center">
-                    <button
-                        onClick={() => setShowInfo(true)}
-                        className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors flex items-center justify-center order-first sm:order-none"
-                        title="About Project"
-                    >
-                        <Info size={24} />
-                    </button>
-                    <div className="flex bg-gray-100 p-1 rounded-lg w-full sm:w-auto justify-center">
+            <div className="w-full bg-gradient-to-r from-gray-900/95 to-gray-800/95 backdrop-blur-lg shadow-2xl border-b border-white/10 p-4 z-10 relative print:hidden">
+                <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div className="flex items-center gap-4">
                         <button
-                            onClick={() => setIsEditing(true)}
-                            className={`flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all flex-1 sm:flex-none ${isEditing ? 'bg-white shadow text-blue-600' : 'text-gray-600 hover:text-gray-900'}`}
+                            onClick={() => navigate('/')}
+                            className="flex items-center gap-2 text-gray-300 hover:text-blue-400 hover:bg-white/10 px-3 py-2 rounded-lg transition-all"
+                            title="Back to Home"
                         >
-                            <Edit2 size={16} /> Edit
+                            <ArrowLeft size={20} />
+                            <span className="hidden sm:inline text-sm font-medium">Back</span>
+                        </button>
+                        <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                            IMED Resume Builder
+                        </h1>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto items-center">
+                        <div className="flex bg-white/5 backdrop-blur-sm p-1 rounded-lg border border-white/10 w-full sm:w-auto justify-center">
+                            <button
+                                onClick={() => setIsEditing(true)}
+                                className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-md text-sm font-semibold transition-all flex-1 sm:flex-none ${isEditing
+                                        ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/30'
+                                        : 'text-gray-300 hover:text-white hover:bg-white/5'
+                                    }`}
+                            >
+                                <Edit2 size={16} /> Edit
+                            </button>
+                            <button
+                                onClick={() => setIsEditing(false)}
+                                className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-md text-sm font-semibold transition-all flex-1 sm:flex-none ${!isEditing
+                                        ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg shadow-green-500/30'
+                                        : 'text-gray-300 hover:text-white hover:bg-white/5'
+                                    }`}
+                            >
+                                <Eye size={16} /> Preview
+                            </button>
+                        </div>
+                        <button
+                            onClick={handleClearData}
+                            className="flex items-center justify-center gap-2 bg-gradient-to-r from-red-500/20 to-red-600/20 hover:from-red-500/30 hover:to-red-600/30 text-red-400 border border-red-500/30 px-4 py-2.5 rounded-lg shadow-lg text-sm font-semibold transition-all w-full sm:w-auto backdrop-blur-sm"
+                            title="Clear all data (for public PCs)"
+                        >
+                            <Trash2 size={16} /> Clear Data
                         </button>
                         <button
-                            onClick={() => setIsEditing(false)}
-                            className={`flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all flex-1 sm:flex-none ${!isEditing ? 'bg-white shadow text-green-600' : 'text-gray-600 hover:text-gray-900'}`}
+                            onClick={handlePrint}
+                            className="flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-4 py-2.5 rounded-lg shadow-lg shadow-purple-500/30 text-sm font-semibold transition-all w-full sm:w-auto"
                         >
-                            <Eye size={16} /> Preview
+                            <Printer size={16} /> Print / Save PDF
                         </button>
                     </div>
-                    <button
-                        onClick={handleClearData}
-                        className="flex items-center justify-center gap-2 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 px-4 py-2 rounded shadow text-sm font-bold transition-colors w-full sm:w-auto"
-                        title="Clear all data (for public PCs)"
-                    >
-                        <Trash2 size={16} /> Clear Data
-                    </button>
-                    <button
-                        onClick={handlePrint}
-                        className="flex items-center justify-center gap-2 bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded shadow text-sm font-bold transition-colors w-full sm:w-auto"
-                    >
-                        <Printer size={16} /> Print / Save PDF
-                    </button>
                 </div>
             </div>
 
