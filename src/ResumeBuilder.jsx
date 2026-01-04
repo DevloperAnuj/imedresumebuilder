@@ -148,63 +148,95 @@ const ResumeBuilder = () => {
     }, []);
 
     // --- Initial State ---
-    const [resumeData, setResumeData] = useState({
-        // Static header image path (replace with your actual hosted image URL or local path)
-        headerImage: headerImg,
-        name: "John Doe",
-        details: {
-            course: "MBA General",
-            specialization: "Marketing & Operations",
-            dob: "01 January 2000",
-            domicile: "State, Country",
-            email: "john.doe@example.com",
-            mobile: "9876543210",
-            address: "123, Street Name, City, State, Country - 123456"
-        },
-        objective: "A highly motivated and results-oriented professional seeking a challenging position in a reputable organization to utilize my skills and education for the growth of the company while achieving personal career goals.",
-        education: [
-            { exam: "MBA", year: "2024", board: "University Name, City", marks: "8.5 CGPA" },
-            { exam: "B. Tech", year: "2022", board: "Technical University, City", marks: "75.00 %" },
-            { exam: "HSC", year: "2018", board: "State Board of Education", marks: "70.00 %" },
-            { exam: "SSC", year: "2016", board: "State Board of Education", marks: "85.00 %" }
-        ],
-        internships: [
-            "Summer Intern at ABC Corp, City from June 2023 – August 2023. Gained hands-on experience in market research and digital marketing strategies."
-        ],
-        experience: [
-            "Junior Associate at XYZ Solutions from Jan 2024 to Present. Responsible for managing client relationships and assisting in project management tasks.",
-            "Business Development Trainee at Tech Startups Inc. from June 2022 to Dec 2023. Assisted in lead generation and preparing sales pitches for potential clients."
-        ],
-        collegeProjects: [
-            { title: "Smart Inventory Management System", description: "Developed a system to track inventory levels in real-time using IoT sensors, reducing stockouts by 20%." },
-            { title: "Sustainable Energy Harvester", description: "Designed a prototype for harvesting energy from foot traffic in high-density areas." }
-        ],
-        personalProjects: [
-            { title: "Budget Tracker App", description: "A mobile application to help students manage their monthly expenses. Features include expense categorization and visual reports.", link: "https://play.google.com/store/apps/details?id=com.example.budget" },
-            { title: "Portfolio Website", description: "Designed and deployed a personal portfolio website to showcase academic and professional achievements.", link: "https://johndoe.com" }
-        ],
-        certifications: [
-            { title: "Course on Computer Concepts (CCC)", description: "NIELIT, 2023" }
-        ],
-        technicalSkills: [
-            "Python", "Java", "SQL", "Microsoft Office Suite"
-        ],
-        softSkills: ["Team Leadership", "Problem Solving", "Effective Communication", "Time Management"],
-        activities: [
-            { title: "Volunteer at Local NGO", description: "Organized community cleanup drives and awareness campaigns about environmental conservation." }
-        ],
-        strengths: ["Adaptability", "Fast Learner", "Positive Attitude", "Strategic Thinking"],
-        interests: ["Reading", "Traveling", "Photography", "Chess"],
-        socials: [
-            { platform: "LinkedIn", link: "https://linkedin.com/in/johndoe" },
-            { platform: "GitHub", link: "https://github.com/johndoe" }
-        ],
-        declaration: {
-            text: "I hereby declare that all the facts given here are true to my knowledge.",
-            place: "City",
-            date: new Date().toLocaleDateString()
+    const getInitialResumeData = () => {
+        // Try to load from localStorage first
+        try {
+            const savedData = localStorage.getItem('imedResumeData');
+            if (savedData) {
+                const parsed = JSON.parse(savedData);
+                // Ensure headerImage is set (in case it's missing from saved data)
+                return {
+                    ...parsed,
+                    headerImage: headerImg
+                };
+            }
+        } catch (error) {
+            console.error('Error loading resume data from localStorage:', error);
         }
-    });
+
+        // Return default data if nothing in localStorage
+        return {
+            // Static header image path (replace with your actual hosted image URL or local path)
+            headerImage: headerImg,
+            name: "John Doe",
+            details: {
+                course: "MBA General",
+                specialization: "Marketing & Operations",
+                dob: "01 January 2000",
+                domicile: "State, Country",
+                email: "john.doe@example.com",
+                mobile: "9876543210",
+                address: "123, Street Name, City, State, Country - 123456"
+            },
+            objective: "A highly motivated and results-oriented professional seeking a challenging position in a reputable organization to utilize my skills and education for the growth of the company while achieving personal career goals.",
+            education: [
+                { exam: "MBA", year: "2024", board: "University Name, City", marks: "8.5 CGPA" },
+                { exam: "B. Tech", year: "2022", board: "Technical University, City", marks: "75.00 %" },
+                { exam: "HSC", year: "2018", board: "State Board of Education", marks: "70.00 %" },
+                { exam: "SSC", year: "2016", board: "State Board of Education", marks: "85.00 %" }
+            ],
+            internships: [
+                "Summer Intern at ABC Corp, City from June 2023 – August 2023. Gained hands-on experience in market research and digital marketing strategies."
+            ],
+            experience: [
+                "Junior Associate at XYZ Solutions from Jan 2024 to Present. Responsible for managing client relationships and assisting in project management tasks.",
+                "Business Development Trainee at Tech Startups Inc. from June 2022 to Dec 2023. Assisted in lead generation and preparing sales pitches for potential clients."
+            ],
+            collegeProjects: [
+                { title: "Smart Inventory Management System", description: "Developed a system to track inventory levels in real-time using IoT sensors, reducing stockouts by 20%." },
+                { title: "Sustainable Energy Harvester", description: "Designed a prototype for harvesting energy from foot traffic in high-density areas." }
+            ],
+            personalProjects: [
+                { title: "Budget Tracker App", description: "A mobile application to help students manage their monthly expenses. Features include expense categorization and visual reports.", link: "https://play.google.com/store/apps/details?id=com.example.budget" },
+                { title: "Portfolio Website", description: "Designed and deployed a personal portfolio website to showcase academic and professional achievements.", link: "https://johndoe.com" }
+            ],
+            certifications: [
+                { title: "Course on Computer Concepts (CCC)", description: "NIELIT, 2023" }
+            ],
+            technicalSkills: [
+                "Python", "Java", "SQL", "Microsoft Office Suite"
+            ],
+            softSkills: ["Team Leadership", "Problem Solving", "Effective Communication", "Time Management"],
+            activities: [
+                { title: "Volunteer at Local NGO", description: "Organized community cleanup drives and awareness campaigns about environmental conservation." }
+            ],
+            strengths: ["Adaptability", "Fast Learner", "Positive Attitude", "Strategic Thinking"],
+            interests: ["Reading", "Traveling", "Photography", "Chess"],
+            socials: [
+                { platform: "LinkedIn", link: "https://linkedin.com/in/johndoe" },
+                { platform: "GitHub", link: "https://github.com/johndoe" }
+            ],
+            declaration: {
+                text: "I hereby declare that all the facts given here are true to my knowledge.",
+                place: "City",
+                date: new Date().toLocaleDateString()
+            }
+        };
+    };
+
+    const [resumeData, setResumeData] = useState(getInitialResumeData);
+
+    // Save to localStorage whenever resumeData changes
+    useEffect(() => {
+        try {
+            // Create a copy without the headerImage to save space
+            const dataToSave = { ...resumeData };
+            delete dataToSave.headerImage;
+            localStorage.setItem('imedResumeData', JSON.stringify(dataToSave));
+        } catch (error) {
+            console.error('Error saving resume data to localStorage:', error);
+        }
+    }, [resumeData]);
 
     // --- Handlers ---
     const handleInputChange = (section, field, value) => {
