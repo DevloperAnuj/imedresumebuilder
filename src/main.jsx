@@ -24,6 +24,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                 <Route path="/terms" element={<TermsOfService />} />
                 <Route path="/about" element={<AboutUs />} />
                 <Route path="/contact" element={<ContactUs />} />
+                <Route path="*" element={<LandingPage />} />
             </Routes>
         </BrowserRouter>
     </React.StrictMode>,
