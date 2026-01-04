@@ -276,6 +276,25 @@ const ResumeBuilder = () => {
         }, 100);
     };
 
+    const handleClearData = () => {
+        const confirmClear = window.confirm(
+            "⚠️ WARNING: This will delete ALL your resume data!\n\n" +
+            "This action cannot be undone. Are you sure you want to clear all data?\n\n" +
+            "💡 TIP: If you're on a public PC, make sure to download your resume as PDF before clearing!"
+        );
+
+        if (confirmClear) {
+            // Clear localStorage
+            localStorage.removeItem('imedResumeData');
+
+            // Reset to default data
+            setResumeData(getInitialResumeData());
+
+            // Show success message
+            alert("✅ All data has been cleared successfully!\n\nYou can now start fresh with a new resume.");
+        }
+    };
+
     // --- Components ---
 
 
@@ -308,6 +327,13 @@ const ResumeBuilder = () => {
                             <Eye size={16} /> Preview
                         </button>
                     </div>
+                    <button
+                        onClick={handleClearData}
+                        className="flex items-center justify-center gap-2 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 px-4 py-2 rounded shadow text-sm font-bold transition-colors w-full sm:w-auto"
+                        title="Clear all data (for public PCs)"
+                    >
+                        <Trash2 size={16} /> Clear Data
+                    </button>
                     <button
                         onClick={handlePrint}
                         className="flex items-center justify-center gap-2 bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded shadow text-sm font-bold transition-colors w-full sm:w-auto"
